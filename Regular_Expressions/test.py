@@ -1,24 +1,23 @@
-import re
+# lexems_list_test = ['lw', '$t0', ',', 'num1', 'lw', '$t1', ',', 'num2', 'add', '$t2', ',', '$t0', ',', '$t1', 'sw', '$t2', ',', 'sum']
 
+import re
 
 decimal_regex = re.compile(pattern = r'^-?\d+$')
 
-
 comma_regex = re.compile(pattern = r'^,+$')
-
 
 left_paren_regex = re.compile(pattern = r'^\(+$')
 
-
 right_paren_regex = re.compile(pattern = r'^\)+$')
 
-
+# 1) String starts with a letter from a-z or A-Z, and all other chars are a-z, A-Z, 0-9, or _
 identifier_regex = re.compile(r'^[a-zA-Z][a-zA-Z0-9_]*$')
 
-
+# 2) String starts with a dot and the other chars are a-z or A-Z
 dot_identifier_regex = re.compile(r'^\.[a-zA-Z]+$')
 
-
+# 3) String starts with $ dollar sign, the second char is a letter from a-z or A-Z,
+# and the third char is a number 0-9
 register_regex = re.compile(r'^\$[a-zA-Z][0-9]$')
 
 
@@ -59,43 +58,43 @@ def tokenizer(lexem, nextLexem):
 
         if register_regex.match(nextLexem) or decimal_regex.match(nextLexem):
 
-            return ('Lexem=' + lexem, 'Token=' + lexem)
+            return (lexem, lexem)
         
         else:
             
-            return ('Lexem=' + lexem, 'Token=identifier')
+            return (lexem, 'identifier')
     
     # 2- check dot identifier (i.e. Directive)
     elif dot_identifier_regex.match(lexem):
         
-        return ('Lexem=' + lexem, 'Token=dot-identifier')
+        return (lexem, 'dot-identifier')
 
     # 3- check register
     elif register_regex.match(lexem):
 
-        return ('Lexem=' + lexem, 'Token=register')
+        return (lexem, 'register')
     
     # 4- check decimal numbers
     elif decimal_regex.match(lexem):
 
-        return ('Lexem=' + lexem, 'Token=decimal')
+        return (lexem, 'decimal')
 
     # 5- check left parentheses
     elif left_paren_regex.match(lexem):
 
-        return ('Lexem=' + lexem, 'Token=left-paren')
+        return (lexem, 'left-paren')
     
     # 6- check right parentheses
     elif right_paren_regex.match(lexem):
 
-        return ('Lexem=' + lexem, 'Token=right-paren')
+        return (lexem, 'right-paren')
 
     # 7- check comma
     else:
-        return ('Lexem=' + lexem, 'Token=comma')
+        return (lexem, 'comma')
 
 
-def create_lexem_token_table(lexems_list):
+def create_symbol_table(lexems_list):
 
     size = len(lexems_list)
 
@@ -115,28 +114,4 @@ def create_lexem_token_table(lexems_list):
     return symbol_table
 
 
-def create_symbol_table(lexems_list):
-
-    symbol_table = []
-
-    for (lexem, token) in lexems_list:
-
-        if token == 'Token=identifier':
-
-            symbol_table.append( ( 'Name={}'.format(lexem[6:]), 'Type=memory address' ) )
-    
-    return symbol_table
-
-
-
-lexems_list = create_lexem_token_table(lexems_list)
-
-symbol_table = create_symbol_table(lexems_list)
-
-print('\n\n********************* Lexems and Tokens Table *********************\n\n')
-
-print(lexems_list)
-
-print('\n\n********************* Symbol Table *********************\n\n')
-
-print(symbol_table, end='\n\n')
+print(create_symbol_table(lexems_list))

@@ -1,0 +1,8 @@
+setup.py
+Mini_Compiler.egg-info/PKG-INFO
+Mini_Compiler.egg-info/SOURCES.txt
+Mini_Compiler.egg-info/dependency_links.txt
+Mini_Compiler.egg-info/top_level.txt
+Regular_Expressions/__init__.py
+Regular_Expressions/mips_regex.py
+Regular_Expressions/test.py
